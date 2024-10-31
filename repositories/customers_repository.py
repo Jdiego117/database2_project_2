@@ -1,6 +1,7 @@
 import os
 import mysql.connector
 from mysql.connector import Error
+from common.sql_getter import sql_get
 
 def bulk_insert_customers(customers_df):
     connection = None
@@ -37,3 +38,8 @@ def bulk_insert_customers(customers_df):
             
         if connection is not None and connection.is_connected():
             connection.close()
+            
+def get_customers():
+    customers = sql_get("SELECT c.id, c.name, c.email, c.identification FROM customers as c")
+    
+    return customers
