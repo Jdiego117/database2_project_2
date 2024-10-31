@@ -41,5 +41,34 @@ def bulk_insert_customers(customers_df):
             
 def get_customers():
     customers = sql_get("SELECT c.id, c.name, c.email, c.identification FROM customers as c")
+    return customers
+
+def get_customers_expense():
+    customers = sql_get("""
+        SELECT c.name AS customer_name, c.email as customer_email, SUM(o.total) AS total_spent
+        FROM customers c
+        LEFT JOIN orders o ON c.id = o.customer_id
+        GROUP BY c.id;                    
+    """)
+    
+    return customers
+
+def get_customers_with_orders():
+    customers = sql_get("""
+        SELECT c.email AS customer_email, c.name AS customer_name, c.identification AS customer_identification, COUNT(o.id) AS order_count
+        FROM customers c
+        INNER JOIN orders o ON c.id = o.customer_id
+        GROUP BY c.id;
+    """)
+    
+    return customers
+
+def get_customers_without_orders():
+    customers = sql_get("""
+        SELECT c.id AS customer_id, c.name AS customer_name, c.identification
+        FROM customers c
+        LEFT JOIN orders o ON c.id = o.customer_id
+        WHERE o.id IS NULL;
+    """)
     
     return customers
