@@ -115,12 +115,15 @@ def extract_order_items_from_excel(order_items_excel):
 
     st.write(order_items_df)
 
+st.title('Bulk Imports')
+
 products_excel = st.file_uploader('Upload the products excel file', type=['xlsx', 'xls'])
 customers_excel = st.file_uploader('Upload the customers excel file', type=['xlsx', 'xls'])
 suppliers_excel = st.file_uploader('Upload the suppliers excel file', type=['xlsx', 'xls'])
 product_suppliers_excel = st.file_uploader('Upload the product suppliers excel file', type=['xlsx', 'xls'])
 orders_excel = st.file_uploader('Upload the orders excel file', type=['xlsx', 'xls'])
 order_items_excel = st.file_uploader('Upload the order items excel file', type=['xlsx', 'xls'])
+
 
 if st.button('Upload'):
     if products_excel is not None:
