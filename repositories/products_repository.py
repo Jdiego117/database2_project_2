@@ -1,6 +1,7 @@
 import os
 import mysql.connector
 from mysql.connector import Error
+from common.sql_getter import sql_get
 
 def bulk_insert_products(products_df):
     connection = None
@@ -37,3 +38,38 @@ def bulk_insert_products(products_df):
             
         if connection is not None and connection.is_connected():
             connection.close()
+            
+def products_avg_price():
+    product = sql_get("""
+        SELECT AVG(price) AS average_price
+        FROM products;           
+    """)
+
+    return product
+
+def products_min_price():
+    product = sql_get("""
+        SELECT MIN(price) AS min_product_price
+        FROM products;    
+    """)
+
+    return product
+
+def products_supplier_quantity():
+    products = sql_get("""
+        SELECT p.name AS product_name, p.stock_quantity, s.name AS supplier_name
+        FROM products p
+        LEFT JOIN product_suppliers ps ON p.id = ps.product_id
+        LEFT JOIN suppliers s ON ps.supplier_id = s.id;   
+    """)
+
+    return products
+
+def products_out_of_stock():
+    products = sql_get("""
+        SELECT name AS product_name
+        FROM products
+        WHERE stock_quantity = 0; 
+    """)
+
+    return products
