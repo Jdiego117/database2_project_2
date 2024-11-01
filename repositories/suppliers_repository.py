@@ -1,6 +1,7 @@
 import os
 import mysql.connector
 from mysql.connector import Error
+from common.sql_getter import sql_get
 
 def bulk_insert_suppliers(suppliers_df):
     connection = None
@@ -37,3 +38,13 @@ def bulk_insert_suppliers(suppliers_df):
             
         if connection is not None and connection.is_connected():
             connection.close()
+            
+def get_suppliers_products():
+    suppliers = sql_get("""
+        SELECT s.name AS supplier_name, COUNT(ps.product_id) AS number_of_products
+        FROM suppliers s
+        LEFT JOIN product_suppliers ps ON s.id = ps.supplier_id
+        GROUP BY s.id;          
+    """)
+    
+    return suppliers
